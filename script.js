@@ -1,10 +1,3 @@
-// Atualiza o ano automaticamente para evitar manutenção manual no rodapé.
-const yearElement = document.getElementById("current-year");
-
-if (yearElement) {
-  yearElement.textContent = String(new Date().getFullYear());
-}
-
 const sectionLinks = document.querySelectorAll('a[href^="#"]');
 
 // Ajusta a rolagem para considerar o cabeçalho fixo.
@@ -35,3 +28,35 @@ sectionLinks.forEach((link) => {
     });
   });
 });
+
+const cookieBanner = document.getElementById("cookie-banner");
+const cookieAcceptButton = document.getElementById("cookie-accept");
+const cookieConsentKey = "cookieConsentAccepted";
+
+// Salva o aceite de cookies no navegador para não exibir o aviso novamente.
+function hasAcceptedCookies() {
+  try {
+    return localStorage.getItem(cookieConsentKey) === "true";
+  } catch (error) {
+    return false;
+  }
+}
+
+function saveCookieConsent() {
+  try {
+    localStorage.setItem(cookieConsentKey, "true");
+  } catch (error) {
+    return;
+  }
+}
+
+if (cookieBanner && !hasAcceptedCookies()) {
+  cookieBanner.hidden = false;
+}
+
+if (cookieBanner && cookieAcceptButton) {
+  cookieAcceptButton.addEventListener("click", () => {
+    saveCookieConsent();
+    cookieBanner.hidden = true;
+  });
+}
